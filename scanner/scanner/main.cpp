@@ -16,7 +16,7 @@ using namespace std;
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/fcntl.h>
-
+#include <sstream>
 
 //对某一ip进行端口扫描
 void scanPort(char *);
@@ -24,16 +24,53 @@ void scanPort(char *);
 
 int main(int argc, const char * argv[]) {
     
-    char ipadd[40] = {"192.168.54.128"};
+    char ipadd[40];
     
-//    下列功能是由ip 显示主机信息，本地要有反向解析的服务，或在/etc/hosts中手动添加对应信息
-//    hostent *myh;
-//    in_addr inad ;
-//    inad.s_addr =  inet_addr(ipadd);
-//    myh = gethostbyaddr(&inad, 4, AF_INET);
-//    cout << myh->h_name<<endl;
+    //判断是否输入了ip
+    if(argc != 2){
+        cout << "请检查输入参数格式\n";
+        return 0;
+    }
     
-    scanPort(ipadd);
+    strcpy(ipadd,argv[1]);
+    
+    //找到第三个点的位置
+    int pos = 0;
+    int flag = 0;
+    for(pos = 0;pos < 40;pos++)
+    {
+        if( ipadd[pos] == '.'){
+            flag++;
+        }
+        if(flag == 3){
+            break;
+        }
+    }
+    if(pos == 40 || pos > 15){
+        cout << "请检查输入参数格式\n";
+        return 0;
+    }
+    
+    
+    stringstream ss;
+    for(int i = 1;i <= 255;i++){
+        ss.clear();
+        ss << i;
+        ss >> (ipadd + pos + 1);
+        //    下列功能是由ip 显示主机信息，本地要有反向解析的服务，或在/etc/hosts中手动添加对应信息
+        //    hostent *myh;
+        //    in_addr inad ;
+        //    inad.s_addr =  inet_addr(ipadd);
+        //    myh = gethostbyaddr(&inad, 4, AF_INET);
+        //    cout << myh->h_name<<endl;
+        cout << "开始扫描 "<<ipadd<<"的端口"<<endl;
+        scanPort(ipadd);
+    }
+    
+    
+    
+    
+
     return 0;
 }
 
