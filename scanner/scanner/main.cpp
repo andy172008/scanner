@@ -53,7 +53,7 @@ int main(int argc, const char * argv[]) {
     
     
     stringstream ss;
-    for(int i = 1;i <= 255;i++){
+    for(int i = 128;i <= 128;i++){
         ss.clear();
         ss << i;
         ss >> (ipadd + pos + 1);
@@ -141,8 +141,8 @@ void scanPort(char * destIp){
             }
         }
         
-        //接下来对情况进行判断
-        //fd_set
+        
+        //关闭socket
         
         close(sockfd);
         
